@@ -1,10 +1,10 @@
 import './App.scss';
-import Task from './components/task';
+import AllTasks from './components/allTasks';
 
 function App() {
   return (
     <div className="App">
-        <Task/>
+        <AllTasks/>
     </div>
   );
 }

@@ -1,29 +1,20 @@
 import React, { Component } from "react";
 
 class Task extends Component {
-  state = {
-    task: {
-      description: "Task 1",
-      startDate: "2020-11-05",
-      endDate: "2020-11-05",
-      status: "On Going",
-    },
-  };
   render() {
     return (
-      <table>
         <tr>
-          <td>{this.state.task.description}</td>
-          <td>{this.getDate(this.state.task.startDate)}</td>
-          <td>{this.getDate(this.state.task.endDate)}</td>
+          <td>{this.props.task.description}</td>
+          <td>{this.getDate(this.props.task.startDate)}</td>
+          <td>{this.getDate(this.props.task.endDate)}</td>
           <td className="buttons">
             <span
               className={this.getStatusClasses()}
             >
-              {this.state.task.status}
+              {this.props.task.status}
             </span>
             <span className="hidden hidden-buttons">
-              {this.state.task.status !== "Exceeded" && (
+              {this.props.task.status !== "Exceeded" && (
                 <span
                   className="status status-update"
                 >
@@ -38,14 +29,13 @@ class Task extends Component {
             </span>
           </td>
         </tr>
-      </table>
     );
   }
 
   getStatusClasses() {
     let classes = "status status-";
-    if (this.state.task.status !== "Exceeded") {
-      if (this.state.task.status === "Done") {
+    if (this.props.task.status !== "Exceeded") {
+      if (this.props.task.status === "Done") {
         classes += "done";
       } else {
         classes += "on-going";

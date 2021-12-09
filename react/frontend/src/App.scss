@@ -36,8 +36,41 @@ table {
   border-collapse: collapse;
   box-shadow: 0px 5px 10px $clr-gray300;
   background-color: white;
-  width: 100%;
+  width: 85%;
 
+  thead {
+    box-shadow: 0 10px 10px $clr-gray300;
+    text-align: center;
+  }
+
+  th {
+    padding: 1rem 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    font-size: 0.7rem;
+    font-weight: 900;
+  }
+
+  .addTask {
+
+    transition: transform .2s;
+
+    span {
+      white-space: nowrap;
+      box-shadow: 0 5px 10px $clr-gray300;
+      border-radius: $radius;
+      padding: 0.7rem 2rem;
+      background-color: $clr-gray600;
+      color: $clr-gray100;
+
+    }
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  tbody,
   tr {
     background-color: $clr-gray100;
   }
@@ -54,13 +87,14 @@ table {
 
   td,
   .buttons {
-      position: relative;
+    position: relative;
   }
 
   td,
   span {
-      text-align: center;
+    text-align: center;
   }
+
   .status {
     z-index: 1;
     border-radius: $radius;
@@ -101,6 +135,14 @@ table {
     }
   }
 
+  tbody>tr:nth-child(even) {
+    background-color: $clr-gray150;
+
+    .hidden-buttons {
+      background-color: $clr-gray150;
+    }
+  }
+
   .hidden {
     text-decoration: none;
     transition: 0.2s ease-in;
@@ -121,7 +163,7 @@ table {
 
   }
 
-  tr:hover {
+  tbody>tr:hover {
     cursor: pointer;
     // box-shadow: 0 5px 10px $clr-gray400;
 
@@ -139,10 +181,8 @@ table {
   }
 }
 
-@media only screen and (max-width: 1800px) {
-
-  table {
-    width: 80%;
-    margin-right: 30ch;
+@media only screen and (max-width: 1500px) {
+  table{
+    width: 70%;
   }
 }
