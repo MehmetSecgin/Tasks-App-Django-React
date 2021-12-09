@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from .models import Task
 from .serializers import TaskSerializer
 
+
+# Name of the functions are self explanatory.
+
 @api_view(['GET'])
 def apiOverview(request):
 
