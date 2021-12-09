@@ -1,6 +1,8 @@
 import { Component } from "react";
-import "./App.scss";
 import AllTasks from "./components/allTasks";
+import ModalDelete from "./components/modalDelete";
+import "bootstrap/dist/css/bootstrap.min.css"; // Required for styling the Modals
+import "./App.scss";
 
 class App extends Component {
   constructor(props) {
@@ -29,8 +31,55 @@ class App extends Component {
           status: "Exceeded",
         },
       ],
+      modals: {
+        add: {
+          name: "add",
+          show: true,
+        },
+        delete: {
+          name: "delete",
+          show: false,
+          id: "",
+        },
+      },
     };
+
+    // Binding Functions
+    this.startDelete = this.startDelete.bind(this);
   }
+
+  // Added the id field here for future use. Going to need it for the delete api call.
+  startDelete(task) {
+    this.setState({
+      modals: {
+        delete: {
+          name: "delete",
+          id: task.id,
+          show: true,
+        },
+      },
+    });
+  }
+
+  handleShowModal = (modal) => {
+    this.setState({
+      modals: {
+        [modal]: {
+          show: true,
+        },
+      },
+    });
+  };
+  handleHideModal = (modal) => {
+    console.log(modal);
+    this.setState({
+      modals: {
+        [modal]: {
+          show: false,
+        },
+      },
+    });
+  };
 
   // To change the state of the tasks
   handleStateChange = (task) => {
@@ -46,9 +95,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        {/* <ModalAdd modal={this.state.modals.add} /> */}
+        <ModalDelete
+          modal={this.state.modals.delete}
+          onClose={this.handleHideModal}
+        />
         <AllTasks
           tasks={this.state.tasks}
           onStateChange={this.handleStateChange}
+          onDelete={this.startDelete}
         />
       </div>
     );

@@ -3,7 +3,7 @@ import Task from "./task";
 
 class AllTasks extends Component {
   render() {
-    const { tasks,onStateChange} = this.props;
+    const { tasks, onStateChange,onDelete } = this.props;
     return (
       <div>
         <table>
@@ -23,7 +23,12 @@ class AllTasks extends Component {
           </thead>
           <tbody>
             {tasks.map((task) => (
-              <Task key={task.id} task={task} onStateChange={onStateChange}/>
+              <Task
+                key={task.id}
+                task={task}
+                onStateChange={onStateChange}
+                onDelete={onDelete}
+              />
             ))}
           </tbody>
         </table>

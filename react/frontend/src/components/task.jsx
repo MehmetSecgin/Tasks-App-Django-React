@@ -11,7 +11,7 @@ class Task extends Component {
         <td>{this.getDate(this.props.task.endDate)}</td>
         <td className="buttons">
           <span
-            onClick={() =>this.props.onStateChange(this.props.task)}
+            onClick={() => this.props.onStateChange(this.props.task)}
             className={this.getStatusClasses()}
           >
             {this.props.task.status}
@@ -20,7 +20,12 @@ class Task extends Component {
             {this.props.task.status !== "Exceeded" && (
               <span className="status status-update">UPDATE</span>
             )}
-            <span className="status status-delete">DELETE</span>
+            <span
+              onClick={() => this.props.onDelete(this.props.task)}
+              className="status status-delete"
+            >
+              DELETE
+            </span>
           </span>
         </td>
       </tr>
