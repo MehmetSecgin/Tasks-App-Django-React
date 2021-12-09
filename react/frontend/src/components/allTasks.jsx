@@ -2,32 +2,8 @@ import React, { Component } from "react";
 import Task from "./task";
 
 class AllTasks extends Component {
-  state = {
-    tasks: [
-      {
-        id: "1",
-        description: "Task 1",
-        startDate: "2020-11-05",
-        endDate: "2020-11-05",
-        status: "On Going",
-      },
-      {
-        id: "2",
-        description: "Task 2",
-        startDate: "2020-11-05",
-        endDate: "2020-11-05",
-        status: "Done",
-      },
-      {
-        id: "3",
-        description: "Task 3",
-        startDate: "2020-11-05",
-        endDate: "2020-11-05",
-        status: "Exceeded",
-      },
-    ],
-  };
   render() {
+    const { tasks,onStateChange} = this.props;
     return (
       <div>
         <table>
@@ -46,8 +22,8 @@ class AllTasks extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.tasks.map((task) => (
-              <Task key={task.id} task={task} />
+            {tasks.map((task) => (
+              <Task key={task.id} task={task} onStateChange={onStateChange}/>
             ))}
           </tbody>
         </table>
