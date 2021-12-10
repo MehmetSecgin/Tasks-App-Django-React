@@ -37,6 +37,8 @@ class App extends Component {
     };
 
     // Binding Functions
+    this.fetchTasks = this.fetchTasks.bind(this);
+
     this.startDelete = this.startDelete.bind(this);
     this.startEdit = this.startEdit.bind(this);
     this.clearActiveItem = this.clearActiveItem.bind(this);
@@ -200,14 +202,18 @@ class App extends Component {
   };
 
   // To change the state of the tasks
-  handleStateChange = (task) => {
+  handleStateChange = async (task) => {
     // Right Now it changes the status but to show it we need to re-render the tasks. I'm going to implement an api call here later on.
     if (task.status !== "Exceeded") {
       task.status === "On Going"
         ? (task.status = "Done")
         : (task.status = "On Going");
     }
-    console.log(task);
+
+    var csrfToken = this.getCookie("csrftoken");
+
+    var url = `http://127.0.0.1:8000/task-update/${task.id}/`;
+    this.sendData(url, csrfToken, "POST", task).then(this.fetchTasks);
   };
 
   render() {
