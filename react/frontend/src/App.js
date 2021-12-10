@@ -38,10 +38,13 @@ class App extends Component {
     // Binding Functions
     this.startDelete = this.startDelete.bind(this);
     this.startEdit = this.startEdit.bind(this);
+    this.clearActiveItem = this.clearActiveItem.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.clearActiveItem = this.clearActiveItem.bind(this);
+    this.addTask = this.addTask.bind(this);
+
+    this.deleteTask = this.deleteTask.bind(this);
+
     this.getCookie = this.getCookie.bind(this);
   }
 
@@ -103,22 +106,14 @@ class App extends Component {
     });
   }
 
-  handleSubmit(e) {
+  addTask(e) {
     e.preventDefault();
 
     var csrfToken = this.getCookie("csrftoken");
 
     var url = "http://127.0.0.1:8000/task-create/";
 
-    console.log(this.state.activeItem);
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        "X-CSRFToken": csrfToken,
-      },
-      body: JSON.stringify(this.state.activeItem),
-    })
+    this.sendData(url, csrfToken, "POST", this.state.activeItem)
       .then((response) => {
         this.fetchTasks();
         this.clearActiveItem();
@@ -126,6 +121,32 @@ class App extends Component {
       .catch(function (error) {
         console.log("ERROR: ", error);
       });
+  }
+
+  deleteTask() {
+    var csrfToken = this.getCookie("csrftoken");
+    var id = this.state.modals.delete.id;
+
+    var url = `http://localhost:8000/task-delete/${id}/`;
+    this.sendData(url, csrfToken, "DELETE", id)
+      .then((response) => {
+        this.fetchTasks();
+        this.handleModalVisibility("delete", false);
+      })
+      .catch(function (error) {
+        console.log("ERROR: ", error);
+      });
+  }
+
+  sendData(url, csrfToken, method, data = "") {
+    return fetch(url, {
+      method: method,
+      headers: {
+        "Content-type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify(data),
+    });
   }
 
   // To fill the update form with that tasks info
@@ -144,7 +165,7 @@ class App extends Component {
         ...prevstate.modals,
         delete: {
           ...prevstate.modals.delete,
-          id: [task.id],
+          id: task.id,
         },
       },
     }));
@@ -181,12 +202,13 @@ class App extends Component {
         <ModalDelete
           modal={this.state.modals.delete}
           onClose={this.handleModalVisibility}
+          onDelete={this.deleteTask}
         />
         <ModalAdd
           modal={this.state.modals.add}
           onClose={this.handleModalVisibility}
           onChange={this.handleChange}
-          onSubmit={this.handleSubmit}
+          onSubmit={this.addTask}
         />
         <ModalUpdate
           modal={this.state.modals.update}
