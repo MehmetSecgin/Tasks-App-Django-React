@@ -10,29 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: [
-        {
-          id: "1",
-          description: "Task 1",
-          startDate: "2020-11-05",
-          endDate: "2020-11-05",
-          status: "On Going",
-        },
-        {
-          id: "2",
-          description: "Task 2",
-          startDate: "2020-11-05",
-          endDate: "2020-11-05",
-          status: "Done",
-        },
-        {
-          id: "3",
-          description: "Task 3",
-          startDate: "2020-11-05",
-          endDate: "2020-11-05",
-          status: "Exceeded",
-        },
-      ],
+      tasks: [],
       activeItem: {
         id: null,
         description: "",
@@ -51,7 +29,7 @@ class App extends Component {
       },
       updateModal: {
         name: "updateModal",
-        show: true,
+        show: false,
       },
     };
 
@@ -60,8 +38,25 @@ class App extends Component {
     this.startEdit = this.startEdit.bind(this);
   }
 
+  // When the App.js mounts, It will fetch the tasks from the server
+  componentDidMount() {
+    this.fetchTasks();
+  }
+
+  fetchTasks() {
+    console.log("Fetching...");
+    fetch("http://127.0.0.1:8000/task-list/")
+      .then((response) => response.json())
+      .then((data) =>
+        this.setState({
+          tasks: data,
+        })
+      );
+  }
+
+  // To fill the update form with that tasks info
   startEdit(task) {
-    this.handleShowModal("updateModal")
+    this.handleShowModal("updateModal");
     this.setState({
       activeItem: task,
     });
@@ -78,6 +73,7 @@ class App extends Component {
     });
   }
 
+  // Show/Hide Modals
   handleShowModal = (modalName) => {
     console.log("Closing Modal: ", modalName);
     this.setState({
