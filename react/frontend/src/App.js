@@ -38,6 +38,11 @@ class App extends Component {
     // Binding Functions
     this.startDelete = this.startDelete.bind(this);
     this.startEdit = this.startEdit.bind(this);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.clearActiveItem = this.clearActiveItem.bind(this);
+    this.getCookie = this.getCookie.bind(this);
   }
 
   // When the App.js mounts, It will fetch the tasks from the server
@@ -54,6 +59,73 @@ class App extends Component {
           tasks: data,
         })
       );
+  }
+
+  // To securely send/Receive data, taken from django docs
+  getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // To change active item in order to send the updated data
+  handleChange(e) {
+    var name = e.target.name;
+    var value = e.target.value;
+
+    this.setState({
+      activeItem: {
+        ...this.state.activeItem,
+        [name]: value,
+      },
+    });
+  }
+
+  clearActiveItem() {
+    this.setState({
+      activeItem: {
+        id: null,
+        description: "",
+        startDate: "",
+        endDate: "",
+        status: "On Going",
+      },
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    var csrfToken = this.getCookie("csrftoken");
+
+    var url = "http://127.0.0.1:8000/task-create/";
+
+    console.log(this.state.activeItem);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify(this.state.activeItem),
+    })
+      .then((response) => {
+        this.fetchTasks();
+        this.clearActiveItem();
+      })
+      .catch(function (error) {
+        console.log("ERROR: ", error);
+      });
   }
 
   // To fill the update form with that tasks info
@@ -113,6 +185,8 @@ class App extends Component {
         <ModalAdd
           modal={this.state.modals.add}
           onClose={this.handleModalVisibility}
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
         />
         <ModalUpdate
           modal={this.state.modals.update}
