@@ -18,7 +18,7 @@ class Task extends Component {
           <span className="buttons hidden hidden-buttons">
             {task.status === "On Going" && (
               <span
-                onClick={() => onUpdate(task,true)}
+                onClick={() => onUpdate(task, true)}
                 className="status status-update"
               >
                 UPDATE
@@ -36,6 +36,7 @@ class Task extends Component {
     );
   }
 
+  // Changes the styling regarding the status of the task
   getStatusClasses() {
     let classes = "status status-";
     if (this.props.task.status !== "Exceeded") {

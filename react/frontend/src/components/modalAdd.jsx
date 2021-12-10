@@ -3,7 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 class modalAdd extends Component {
   render() {
-    const { modal, onClose, onChange,onSubmit } = this.props;
+    const { modal, onClose, onChange, onSubmit } = this.props;
     return (
       <Modal
         show={modal.show}
@@ -27,7 +27,7 @@ class modalAdd extends Component {
 
             <Form.Group className="mb-3" controlId="formStartDate">
               <Form.Label>Start Date</Form.Label>
-              <Form.Control onChange={onChange} name="startDate" type="date"  />
+              <Form.Control onChange={onChange} name="startDate" type="date" />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formEndDate">
               <Form.Label>End Date</Form.Label>

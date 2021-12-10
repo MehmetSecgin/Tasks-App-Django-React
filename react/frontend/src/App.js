@@ -38,16 +38,12 @@ class App extends Component {
 
     // Binding Functions
     this.fetchTasks = this.fetchTasks.bind(this);
-
     this.startDelete = this.startDelete.bind(this);
-    this.startEdit = this.startEdit.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.clearActiveItem = this.clearActiveItem.bind(this);
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
     this.deleteTask = this.deleteTask.bind(this);
-
     this.getCookie = this.getCookie.bind(this);
   }
 
@@ -56,6 +52,7 @@ class App extends Component {
     this.fetchTasks();
   }
 
+  // To Retreive the tasks from the database
   fetchTasks() {
     console.log("Fetching...");
     fetch("http://127.0.0.1:8000/task-list/")
@@ -97,6 +94,7 @@ class App extends Component {
     });
   }
 
+  // To clear the active item in state
   clearActiveItem() {
     this.setState({
       activeItem: {
@@ -109,6 +107,7 @@ class App extends Component {
     });
   }
 
+  // Submits the data to server for Adding and Updating the data
   handleSubmit(e) {
     e.preventDefault();
 
@@ -118,7 +117,7 @@ class App extends Component {
 
     if (this.state.modals.update.editing === true) {
       url = `http://127.0.0.1:8000/task-update/${this.state.activeItem.id}/`;
-      this.startEdit("", false);
+      this.handleEdit("", false);
     }
 
     this.sendData(url, csrfToken, "POST", this.state.activeItem)
@@ -131,6 +130,7 @@ class App extends Component {
       });
   }
 
+  // Sends DELETE request to server in order to delete the task
   deleteTask() {
     var csrfToken = this.getCookie("csrftoken");
     var id = this.state.modals.delete.id;
@@ -146,6 +146,7 @@ class App extends Component {
       });
   }
 
+  // Repetitive fetch function
   sendData(url, csrfToken, method, data = "") {
     return fetch(url, {
       method: method,
@@ -157,8 +158,8 @@ class App extends Component {
     });
   }
 
-  // To fill the update form with that tasks info
-  startEdit(task, start) {
+  // To fill the update form with that tasks info. If 'start' is false, clears and hides Update Modal
+  handleEdit(task, start) {
     this.handleModalVisibility("update", start);
     this.setState((prevstate) => ({
       ...prevstate,
@@ -202,8 +203,7 @@ class App extends Component {
   };
 
   // To change the state of the tasks
-  handleStateChange = async (task) => {
-    // Right Now it changes the status but to show it we need to re-render the tasks. I'm going to implement an api call here later on.
+  handleStateChange = (task) => {
     if (task.status !== "Exceeded") {
       task.status === "On Going"
         ? (task.status = "Done")
@@ -213,7 +213,12 @@ class App extends Component {
     var csrfToken = this.getCookie("csrftoken");
 
     var url = `http://127.0.0.1:8000/task-update/${task.id}/`;
-    this.sendData(url, csrfToken, "POST", task).then(this.fetchTasks);
+    
+    this.sendData(url, csrfToken, "POST", task)
+      .then(this.fetchTasks)
+      .catch(function (error) {
+        console.log("ERROR: ", error);
+      });
   };
 
   render() {
@@ -242,7 +247,7 @@ class App extends Component {
           onStateChange={this.handleStateChange}
           onDelete={this.startDelete}
           onAdd={this.handleModalVisibility}
-          onUpdate={this.startEdit}
+          onUpdate={this.handleEdit}
         />
       </div>
     );
