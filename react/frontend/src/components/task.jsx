@@ -18,7 +18,7 @@ class Task extends Component {
           <span className="buttons hidden hidden-buttons">
             {task.status === "On Going" && (
               <span
-                onClick={() => onUpdate(task)}
+                onClick={() => onUpdate(task,true)}
                 className="status status-update"
               >
                 UPDATE

@@ -30,6 +30,7 @@ class App extends Component {
         },
         update: {
           name: "update",
+          editing: false,
           show: false,
         },
       },
@@ -41,7 +42,7 @@ class App extends Component {
     this.clearActiveItem = this.clearActiveItem.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
-    this.addTask = this.addTask.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.deleteTask = this.deleteTask.bind(this);
 
@@ -106,12 +107,17 @@ class App extends Component {
     });
   }
 
-  addTask(e) {
+  handleSubmit(e) {
     e.preventDefault();
 
     var csrfToken = this.getCookie("csrftoken");
 
     var url = "http://127.0.0.1:8000/task-create/";
+
+    if (this.state.modals.update.editing === true) {
+      url = `http://127.0.0.1:8000/task-update/${this.state.activeItem.id}/`;
+      this.startEdit("", false);
+    }
 
     this.sendData(url, csrfToken, "POST", this.state.activeItem)
       .then((response) => {
@@ -150,11 +156,19 @@ class App extends Component {
   }
 
   // To fill the update form with that tasks info
-  startEdit(task) {
-    this.handleModalVisibility("update", true);
-    this.setState({
+  startEdit(task, start) {
+    this.handleModalVisibility("update", start);
+    this.setState((prevstate) => ({
+      ...prevstate,
       activeItem: task,
-    });
+      modals: {
+        ...prevstate.modals,
+        update: {
+          ...prevstate.modals.update,
+          editing: start,
+        },
+      },
+    }));
   }
 
   // Added the id field here for future use. Going to need it for the delete api call.
@@ -208,12 +222,14 @@ class App extends Component {
           modal={this.state.modals.add}
           onClose={this.handleModalVisibility}
           onChange={this.handleChange}
-          onSubmit={this.addTask}
+          onSubmit={this.handleSubmit}
         />
         <ModalUpdate
           modal={this.state.modals.update}
-          onClose={this.handleModalVisibility}
           task={this.state.activeItem}
+          onClose={this.handleModalVisibility}
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
         />
         <AllTasks
           tasks={this.state.tasks}

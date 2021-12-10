@@ -3,21 +3,22 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 class ModalUpdate extends Component {
   render() {
-    const { modal, task } = this.props;
+    const { modal, task, onChange, onSubmit } = this.props;
     return (
       <Modal
         show={modal.show}
-        onHide={() => this.props.onClose(modal.name,false)}
+        onHide={() => this.props.onClose(modal.name, false)}
         centered
       >
         <Modal.Header closeButton>
           <Modal.Title>Update Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={onSubmit}>
             <Form.Group className="mb-3" controlId="formDescription">
               <Form.Label>Description</Form.Label>
               <Form.Control
+                onChange={onChange}
                 name="description"
                 type="text"
                 placeholder="Description of the Task"
@@ -28,6 +29,7 @@ class ModalUpdate extends Component {
             <Form.Group className="mb-3" controlId="formStartDate">
               <Form.Label>Start Date</Form.Label>
               <Form.Control
+                onChange={onChange}
                 name="startDate"
                 type="date"
                 defaultValue={task.startDate}
@@ -36,13 +38,14 @@ class ModalUpdate extends Component {
             <Form.Group className="mb-3" controlId="formEndDate">
               <Form.Label>End Date</Form.Label>
               <Form.Control
+                onChange={onChange}
                 name="endDate"
                 type="date"
                 defaultValue={task.endDate}
               />
             </Form.Group>
             <Button
-              onClick={() => this.props.onClose(modal.name,false)}
+              onClick={() => this.props.onClose(modal.name, false)}
               variant="primary"
               type="submit"
             >
