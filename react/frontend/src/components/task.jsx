@@ -2,26 +2,30 @@ import React, { Component } from "react";
 
 class Task extends Component {
   render() {
-    // const { onStateChange } = this.props;
-    // console.log(onStateChange)
+    const { task, onStateChange, onUpdate, onDelete } = this.props;
     return (
       <tr>
-        <td>{this.props.task.description}</td>
-        <td>{this.getDate(this.props.task.startDate)}</td>
-        <td>{this.getDate(this.props.task.endDate)}</td>
+        <td>{task.description}</td>
+        <td>{this.getDate(task.startDate)}</td>
+        <td>{this.getDate(task.endDate)}</td>
         <td className="buttons">
           <span
-            onClick={() => this.props.onStateChange(this.props.task)}
+            onClick={() => onStateChange(task)}
             className={this.getStatusClasses()}
           >
-            {this.props.task.status}
+            {task.status}
           </span>
           <span className="buttons hidden hidden-buttons">
-            {this.props.task.status !== "Exceeded" && (
-              <span className="status status-update">UPDATE</span>
+            {task.status === "On Going" && (
+              <span
+                onClick={() => onUpdate(task)}
+                className="status status-update"
+              >
+                UPDATE
+              </span>
             )}
             <span
-              onClick={() => this.props.onDelete(this.props.task)}
+              onClick={() => onDelete(task)}
               className="status status-delete"
             >
               DELETE

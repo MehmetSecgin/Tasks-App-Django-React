@@ -4,6 +4,7 @@ import "./App.scss";
 import AllTasks from "./components/allTasks";
 import ModalDelete from "./components/modalDelete";
 import ModalAdd from "./components/modalAdd";
+import ModalUpdate from "./components/modalUpdate";
 
 class App extends Component {
   constructor(props) {
@@ -32,26 +33,45 @@ class App extends Component {
           status: "Exceeded",
         },
       ],
-      delete: {
-        name: "delete",
+      activeItem: {
+        id: null,
+        description: "",
+        startDate: "",
+        endDate: "",
+        status: "On Going",
+      },
+      deleteModal: {
+        name: "deleteModal",
         show: false,
         id: "",
       },
-      add: {
-        name: "add",
+      addModal: {
+        name: "addModal",
+        show: false,
+      },
+      updateModal: {
+        name: "updateModal",
         show: true,
       },
     };
 
     // Binding Functions
     this.startDelete = this.startDelete.bind(this);
+    this.startEdit = this.startEdit.bind(this);
+  }
+
+  startEdit(task) {
+    this.handleShowModal("updateModal")
+    this.setState({
+      activeItem: task,
+    });
   }
 
   // Added the id field here for future use. Going to need it for the delete api call.
   startDelete(task) {
     this.setState({
-      delete: {
-        name: "delete",
+      deleteModal: {
+        name: "deleteModal",
         id: task.id,
         show: true,
       },
@@ -62,7 +82,7 @@ class App extends Component {
     console.log("Closing Modal: ", modalName);
     this.setState({
       [modalName]: {
-        name:[modalName],
+        name: [modalName],
         show: true,
       },
     });
@@ -71,7 +91,7 @@ class App extends Component {
     console.log("Closing Modal: ", modalName);
     this.setState({
       [modalName]: {
-        name:[modalName],
+        name: [modalName],
         show: false,
       },
     });
@@ -91,13 +111,22 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ModalAdd modal={this.state.add} onClose={this.handleHideModal} />
-        <ModalDelete modal={this.state.delete} onClose={this.handleHideModal} />
+        <ModalAdd modal={this.state.addModal} onClose={this.handleHideModal} />
+        <ModalDelete
+          modal={this.state.deleteModal}
+          onClose={this.handleHideModal}
+        />
+        <ModalUpdate
+          modal={this.state.updateModal}
+          onClose={this.handleHideModal}
+          task={this.state.activeItem}
+        />
         <AllTasks
           tasks={this.state.tasks}
           onStateChange={this.handleStateChange}
           onDelete={this.startDelete}
           onAdd={this.handleShowModal}
+          onUpdate={this.startEdit}
         />
       </div>
     );

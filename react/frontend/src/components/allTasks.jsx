@@ -3,7 +3,7 @@ import Task from "./task";
 
 class AllTasks extends Component {
   render() {
-    const { tasks, onStateChange, onDelete, onAdd } = this.props;
+    const { tasks, onStateChange, onDelete, onAdd, onUpdate } = this.props;
     return (
       <div>
         <table>
@@ -11,7 +11,7 @@ class AllTasks extends Component {
             <tr className="table-header">
               <th colSpan="3">Tasks</th>
               <th className="addTask">
-                <span onClick={() => onAdd("add")}>Add Task</span>
+                <span onClick={() => onAdd("addModal")}>Add Task</span>
               </th>
             </tr>
             <tr>
@@ -28,6 +28,7 @@ class AllTasks extends Component {
                 task={task}
                 onStateChange={onStateChange}
                 onDelete={onDelete}
+                onUpdate={onUpdate}
               />
             ))}
           </tbody>

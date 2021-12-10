@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
-class modalAdd extends Component {
+class ModalUpdate extends Component {
   render() {
-    const { modal, onClose } = this.props;
-    // console.log("ADD MODAL:", modal);
+    const { modal, task } = this.props;
     return (
-      <Modal show={modal.show} onHide={() => onClose(modal.name)} centered>
+      <Modal
+        show={modal.show}
+        onHide={() => this.props.onClose(modal.name)}
+        centered
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Add New Task</Modal.Title>
+          <Modal.Title>Update Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -18,19 +21,28 @@ class modalAdd extends Component {
                 name="description"
                 type="text"
                 placeholder="Description of the Task"
+                defaultValue={task.description}
               />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formStartDate">
               <Form.Label>Start Date</Form.Label>
-              <Form.Control name="startDate" type="date" />
+              <Form.Control
+                name="startDate"
+                type="date"
+                defaultValue={task.startDate}
+              />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formEndDate">
               <Form.Label>End Date</Form.Label>
-              <Form.Control name="endDate" type="date" />
+              <Form.Control
+                name="endDate"
+                type="date"
+                defaultValue={task.endDate}
+              />
             </Form.Group>
             <Button
-              onClick={() => onClose(modal.name)}
+              onClick={() => this.props.onClose(modal.name)}
               variant="primary"
               type="submit"
             >
@@ -43,4 +55,4 @@ class modalAdd extends Component {
   }
 }
 
-export default modalAdd;
+export default ModalUpdate;
