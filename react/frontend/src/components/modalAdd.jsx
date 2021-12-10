@@ -4,9 +4,8 @@ import { Modal, Button, Form } from "react-bootstrap";
 class modalAdd extends Component {
   render() {
     const { modal, onClose } = this.props;
-    // console.log("ADD MODAL:", modal);
     return (
-      <Modal show={modal.show} onHide={() => onClose(modal.name)} centered>
+      <Modal show={modal.show} onHide={() => onClose(modal.name,false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Add New Task</Modal.Title>
         </Modal.Header>
@@ -30,7 +29,7 @@ class modalAdd extends Component {
               <Form.Control name="endDate" type="date" />
             </Form.Group>
             <Button
-              onClick={() => onClose(modal.name)}
+              onClick={() => onClose(modal.name,false)}
               variant="primary"
               type="submit"
             >

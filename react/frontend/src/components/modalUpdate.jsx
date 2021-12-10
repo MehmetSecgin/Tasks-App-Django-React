@@ -7,7 +7,7 @@ class ModalUpdate extends Component {
     return (
       <Modal
         show={modal.show}
-        onHide={() => this.props.onClose(modal.name)}
+        onHide={() => this.props.onClose(modal.name,false)}
         centered
       >
         <Modal.Header closeButton>
@@ -42,7 +42,7 @@ class ModalUpdate extends Component {
               />
             </Form.Group>
             <Button
-              onClick={() => this.props.onClose(modal.name)}
+              onClick={() => this.props.onClose(modal.name,false)}
               variant="primary"
               type="submit"
             >

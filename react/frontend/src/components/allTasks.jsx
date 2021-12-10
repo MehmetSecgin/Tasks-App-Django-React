@@ -11,7 +11,7 @@ class AllTasks extends Component {
             <tr className="table-header">
               <th colSpan="3">Tasks</th>
               <th className="addTask">
-                <span onClick={() => onAdd("addModal")}>Add Task</span>
+                <span onClick={() => onAdd("add",true)}>Add Task</span>
               </th>
             </tr>
             <tr>

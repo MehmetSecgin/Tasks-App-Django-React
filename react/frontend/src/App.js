@@ -18,18 +18,20 @@ class App extends Component {
         endDate: "",
         status: "On Going",
       },
-      deleteModal: {
-        name: "deleteModal",
-        show: false,
-        id: "",
-      },
-      addModal: {
-        name: "addModal",
-        show: false,
-      },
-      updateModal: {
-        name: "updateModal",
-        show: false,
+      modals: {
+        delete: {
+          name: "delete",
+          show: false,
+          id: "",
+        },
+        add: {
+          name: "add",
+          show: false,
+        },
+        update: {
+          name: "update",
+          show: false,
+        },
       },
     };
 
@@ -56,7 +58,7 @@ class App extends Component {
 
   // To fill the update form with that tasks info
   startEdit(task) {
-    this.handleShowModal("updateModal");
+    this.handleModalVisibility("update", true);
     this.setState({
       activeItem: task,
     });
@@ -64,33 +66,30 @@ class App extends Component {
 
   // Added the id field here for future use. Going to need it for the delete api call.
   startDelete(task) {
-    this.setState({
-      deleteModal: {
-        name: "deleteModal",
-        id: task.id,
-        show: true,
+    this.handleModalVisibility("delete", true);
+    this.setState((prevstate) => ({
+      modals: {
+        ...prevstate.modals,
+        delete: {
+          ...prevstate.modals.delete,
+          id: [task.id],
+        },
       },
-    });
+    }));
   }
 
   // Show/Hide Modals
-  handleShowModal = (modalName) => {
-    console.log("Closing Modal: ", modalName);
-    this.setState({
-      [modalName]: {
-        name: [modalName],
-        show: true,
+  handleModalVisibility = (modalName, doShow) => {
+    console.log("Opening Modal: ", modalName);
+    this.setState((prevstate) => ({
+      modals: {
+        ...prevstate.modals,
+        [modalName]: {
+          ...prevstate.modals[modalName],
+          show: doShow,
+        },
       },
-    });
-  };
-  handleHideModal = (modalName) => {
-    console.log("Closing Modal: ", modalName);
-    this.setState({
-      [modalName]: {
-        name: [modalName],
-        show: false,
-      },
-    });
+    }));
   };
 
   // To change the state of the tasks
@@ -107,21 +106,24 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ModalAdd modal={this.state.addModal} onClose={this.handleHideModal} />
         <ModalDelete
-          modal={this.state.deleteModal}
-          onClose={this.handleHideModal}
+          modal={this.state.modals.delete}
+          onClose={this.handleModalVisibility}
+        />
+        <ModalAdd
+          modal={this.state.modals.add}
+          onClose={this.handleModalVisibility}
         />
         <ModalUpdate
-          modal={this.state.updateModal}
-          onClose={this.handleHideModal}
+          modal={this.state.modals.update}
+          onClose={this.handleModalVisibility}
           task={this.state.activeItem}
         />
         <AllTasks
           tasks={this.state.tasks}
           onStateChange={this.handleStateChange}
           onDelete={this.startDelete}
-          onAdd={this.handleShowModal}
+          onAdd={this.handleModalVisibility}
           onUpdate={this.startEdit}
         />
       </div>
